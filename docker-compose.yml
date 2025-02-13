@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: DockerfileFrontendJSG
+    container_name: frontendJSG
+    volumes:
+      - ./frontend:/app:rw
+      - /app/node_modules
+    networks:
+      - redwebJSG
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: DockerfileBackendJSG
+    container_name: backendJSG
+    volumes:
+      - ./backend:/app:rw
+      - /app/vendor
+    networks:
+      - redwebJSG
+
+  web:
+    build:
+      context: ./web
+      dockerfile: DockerfileWebJSG
+    container_name: webJSG
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - redwebJSG
+
+networks:
+  redwebJSG:
+    driver: bridge 
