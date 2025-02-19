@@ -1,11 +1,11 @@
-version: '3'
-
 services:
   frontend:
     build:
       context: ./frontend
       dockerfile: DockerfileFrontendJSG
     container_name: frontendJSG
+    ports:
+      - "5173:5173"
     volumes:
       - ./frontend:/app:rw
       - /app/node_modules
@@ -17,6 +17,8 @@ services:
       context: ./backend
       dockerfile: DockerfileBackendJSG
     container_name: backendJSG
+    ports:
+      - "8000:8000"
     volumes:
       - ./backend:/app:rw
       - /app/vendor

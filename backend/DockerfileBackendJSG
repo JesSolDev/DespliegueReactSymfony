@@ -1,16 +1,27 @@
 FROM php:8.2-cli
 
 RUN apt-get update && apt-get install -y \
-    git unzip libpq-dev && docker-php-ext-install pdo pdo_mysql
+    git \
+    unzip \
+    libpq-dev \
+    libicu-dev \
+    && docker-php-ext-install \
+    pdo \
+    pdo_pgsql \
+    ctype \
+    iconv \
+    intl
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-COPY . .
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
+COPY composer.* ./
 RUN composer install --no-scripts --no-interaction --no-dev --optimize-autoloader
-RUN composer update
+
+COPY . .
 
 EXPOSE 8000
 
